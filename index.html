@@ -6,9 +6,16 @@
 <meta name="theme-color" content="#0d9488">
 <title>적금 이자 계산기 · 세후 만기 수령액부터 청년미래적금 기여금까지</title>
 <meta name="description" content="월 납입액·금리·기간만 넣으면 적금 만기 세후 수령액을 바로 계산합니다. 단리·월복리, 일반과세 15.4%·세금우대 9.5%·비과세 비교, 예금(목돈) 계산, 청년미래적금 정부기여금(일반형 6%·우대형 12%)과 일반 적금 환산 금리까지. 입력값은 서버로 전송되지 않습니다.">
-<meta property="og:title" content="적금 이자 계산기 · 세후 만기 수령액 한 번에">
-<meta property="og:description" content="단리·월복리, 일반과세·세금우대·비과세 비교, 예금 계산, 청년미래적금 정부기여금과 일반 적금 환산 금리까지. 100% 내 기기에서 처리.">
+<meta property="og:title" content="청년미래적금 계산기 · 기여금까지 더한 만기 수령액">
+<meta property="og:description" content="월 납입액과 은행 금리만 넣으면 일반형 6%·우대형 12% 정부기여금과 기여금 이자까지 더한 만기 수령액, 일반 적금 환산 금리를 바로. 일반 적금·예금도 계산. 100% 내 기기에서 처리.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://hwj-hub.github.io/savings_calculator/">
+<meta property="og:image" content="https://hwj-hub.github.io/savings_calculator/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="청년미래적금 만기 수령액 예시 · 월 50만 원 3년 연 7% 일반형 21,105,750원">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://hwj-hub.github.io/savings_calculator/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%90%B7%3C/text%3E%3C/svg%3E">
 <style>
 *,*::before,*::after{box-sizing:border-box}
@@ -810,7 +817,7 @@ $('#reset').addEventListener('click', () => {
   $$('#compSeg button').forEach(x => x.classList.toggle('on', x.dataset.c === 'simple'));
   $$('#ysfSeg button').forEach(x => x.classList.toggle('on', x.dataset.y === 'gen'));
   $$('#schSeg button').forEach(x => x.classList.toggle('on', x.dataset.v === 'y'));
-  init(); toast('초기화했습니다');
+  init(); openMode('ysf'); toast('초기화했습니다');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
@@ -820,7 +827,8 @@ function toast(m){
   clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 1900);
 }
 
-/* 초기값 · 주소 뒤 ?mode=ysf 로 들어오면 청년미래적금 화면으로 연다 */
+/* 초기값 · 처음에는 청년미래적금 화면으로 연다
+   주소 뒤 ?mode=sav(적금) · ?mode=dep(예금)으로 들어오면 그 화면으로 연다 */
 function init(){
   $('#amt').value = (500000).toLocaleString('ko-KR');
   $('#rate').value = '4';
@@ -828,14 +836,12 @@ function init(){
   calc();
 }
 init();
-(function deepLink(){
-  const q = new URLSearchParams(location.search);
-  const m = q.get('mode');
-  if(m === 'ysf' || m === 'dep'){
-    const p = $('.pick[data-k="' + m + '"]');
-    if(p) p.click();
-  }
-})();
+function openMode(m){
+  if(m === 'sav') return;
+  const p = $('.pick[data-k="' + (m === 'dep' ? 'dep' : 'ysf') + '"]');
+  if(p) p.click();
+}
+openMode(new URLSearchParams(location.search).get('mode') || 'ysf');
 </script>
 </body>
 </html>
