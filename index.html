@@ -205,6 +205,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;margin-top:22px;line-
        data-ad-unit="DAN-RmahmIv2FWCVx2Wy"
        data-ad-width="320"
        data-ad-height="50"></ins>
+  <script type="text/javascript" src="https://t1.kakaocdn.net/kas/static/ba.min.js" async></script>
 </div>
 <!-- ══ 광고 슬롯 끝 ══ -->
 
@@ -439,21 +440,13 @@ footer{text-align:center;color:var(--muted);font-size:12px;margin-top:22px;line-
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
-/* ── 광고: 단위 ID가 자리표시자면 슬롯을 지우고, 실제 ID가 있을 때만 스크립트를 부른다 ── */
-(function ads(){
-  let need = false;
-  $$('.ad-slot').forEach(box => {
-    const ins = box.querySelector('ins');
-    const id = ins ? ins.getAttribute('data-ad-unit') : '';
-    if(!id || /^DAN-X+$/.test(id)) box.remove(); else need = true;
-  });
-  if(need){
-    const s = document.createElement('script');
-    s.type = 'text/javascript'; s.async = true;
-    s.src = 'https://t1.kakaocdn.net/kas/static/ba.min.js';
-    document.body.appendChild(s);
-  }
-})();
+/* ── 광고: 애드핏 스크립트는 상단 슬롯에서 바로 부른다(대출 계산기와 같은 방식).
+      단위 ID가 DAN-XXXX… 자리표시자인 슬롯은 지운다 ── */
+$$('.ad-slot').forEach(box => {
+  const ins = box.querySelector('ins');
+  const id = ins ? ins.getAttribute('data-ad-unit') : '';
+  if(!id || /^DAN-X+$/.test(id)) box.remove();
+});
 
 /* ── 청년미래적금 기준값 (2026년 2차 · 금융위원회 9.16 · 9.30 보도자료, 은행 상품 안내) ──
    기여금 = 월 납입액(50만 원 한도) × 일반형 6% · 우대형 12%, 매달 적립
